@@ -310,7 +310,8 @@ void main () {
 </script>                    
 </head>
 
-<body onload="webGLStart();" onkeypress="keyHandler(window.event)">
+<body onload="webGLStart(); this.onkeypress = keyHandler">
+
 <div class="content">
   <h1>PlaySpace</h1>
  <p style="text-align: center;">
