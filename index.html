@@ -167,6 +167,8 @@ void main () {
     }
 
     var shaderProgram;
+    var time = 0.0;
+    var interval = 15; /* milliseconds between frames */
 
     function initShaders() {
         var fragmentShader = getShader(gl, "shader-fs");
@@ -223,7 +225,8 @@ void main () {
                                  squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
       gl.uniformMatrix4fv(shaderProgram.mvpMatrixUniform, false, mvpMatrix);
       gl.uniformMatrix3fv(shaderProgram.normalMatrixUniform, false, normalMatrix);
-      gl.uniform1f(shaderProgram.timeUniform, 0.0);
+      time += 1.0 / (interval * 4);
+      gl.uniform1f(shaderProgram.timeUniform, time);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
     }
 
@@ -262,17 +265,14 @@ void main () {
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
-        drawScene();
+        setInterval(drawScene, interval);
    }
 </script>
-
-
-
 </head>
 
 
 <body onload="webGLStart();">
-   <canvas id="canvas" style="border: none;" width="500" height="500"></canvas>
+   <canvas id="canvas" style="border: none;" width="700" height="700"></canvas>
    <br/>
 </body>
 
