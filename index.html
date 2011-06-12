@@ -4,6 +4,36 @@
 <title>PlaySpace!</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
+<style>
+
+body { font-family: helvetica, sans-serif;}
+
+h1 { 
+ font-size: 48pt;
+ text-align: center;
+ text-shadow: 2px 2px 5px #666;
+ color: #F70;
+}
+.content {
+  margin: auto;
+  width: 600px;
+}
+
+.canvas-wrapper { 
+  width: 600px;
+  padding: 10px;
+  background: black;
+  border: #F70 5px solid;
+  -webkit-border-radius: 20px;
+  -webkit-box-shadow: 5px 5px 20px #000;
+}
+
+canvas {
+  margin: auto;
+}
+
+</style>
+
 <script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
@@ -199,6 +229,13 @@ void main () {
    var mvpMatrix = mat4.create();
    var normalMatrix = mat3.create();
 
+   mat4.identity(mvpMatrix);
+   mat3.identity(normalMatrix);
+
+   mat4.rotate(mvpMatrix, Math.PI / 180 * 30 , [1,0,0]);
+
+
+
    var squareVertexPositionBuffer;
 
     function initBuffers() {
@@ -207,19 +244,16 @@ void main () {
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
         
         vertices = mesh(meshSize);
-        console.log(vertices);
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
         squareVertexPositionBuffer.itemSize = 2;
         squareVertexPositionBuffer.numItems = vertices.length / 2 ;
     }
 
     function drawScene() {
-       gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-       mat4.identity(mvpMatrix);
-       mat3.identity(normalMatrix);
-
+      
       gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
       gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute,
                                  squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -257,23 +291,37 @@ void main () {
      return a;
    }
 
+   function keyHandler(e) {
+     if (e.charCode == 119) { mat4.rotate(mvpMatrix,  0.05, [1.0, 0.0, 0.0]);}
+     if (e.charCode == 115) { mat4.rotate(mvpMatrix, -0.05, [1.0, 0.0, 0.0]);}
+     if (e.charCode == 97) { mat4.rotate(mvpMatrix,   0.05, [0.0, 1.0, 0.0]);}
+     if (e.charCode == 100) { mat4.rotate(mvpMatrix, -0.05, [0.0, 1.0, 0.0]);}     
+   }
+
    function webGLStart() {
         var canvas = document.getElementById("canvas");
         initGL(canvas);
         initShaders();
         initBuffers();
-
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
         setInterval(drawScene, interval);
    }
-</script>
+</script>                    
 </head>
 
-
-<body onload="webGLStart();">
-   <canvas id="canvas" style="border: none;" width="700" height="700"></canvas>
-   <br/>
+<body onload="webGLStart();" onkeypress="keyHandler(window.event)">
+<div class="content">
+  <h1>PlaySpace</h1>
+ <p style="text-align: center;">
+  Use the <strong>W</strong>, <strong>A</strong>, <strong>S</strong>, and <strong>D</strong> 
+     keys to rotate.
+  </p>
+  <div class="canvas-wrapper" id="key" onmouseover='this.focus();'>
+     <canvas id="canvas" style="border: none;" width="600" height="600"></canvas>
+  </div>
+  <br/>
+</div>
 </body>
 
 </html>
