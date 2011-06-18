@@ -60,32 +60,28 @@ varying   vec3 _varying_SF;
 varying   vec3 _varying_SS;
 void main () {
     vec2  x24 = vec2(0.5,0.5);
-    vec2  x42 = vec2(1.05,1.05);
-    float x52 = cos(_uniform);
-    float x54 = sin(_uniform);
-    vec2  x69 = vec2(1.0,1.0);
+    vec2  x31 = vec2(2.0,5.0);
+    vec2  x56 = vec2(1.0,1.0);
     bvec2 x21 = lessThan(x24
-                        ,mod(1.0 / (sin(vec2(_uniform,_uniform)) + x42) *
-                             vec2(dot(vec2(x52,x54),_varying_F)
-                                 ,dot(vec2(x52,- x54),_varying_F.yx))
-                            ,x69));
+                        ,mod(x31 * (- (vec2(cos(_uniform * 0.5)
+                                           ,sin(_uniform * 0.2))) + _varying_F)
+                            ,x56));
     bool  x16 = x21.x == x21.y;
-    vec3  x94 = vec3(-0.37139067,-0.0,-0.9284767);
-    float x88 = abs(dot(_varying_SS,x94));
-    vec3  x126 = vec3(0.37139067,0.0,0.9284767);
-    vec3  x142 = vec3(1.0,1.0,-2.5);
-    float x97 = exp(log(max(0.0
-                           ,dot(vec3(2.0 * dot(_varying_SS,x94)) * _varying_SS +
-                                x126
-                               ,vec3(1.0 / sqrt(dot(x142 - _varying_SF
-                                                   ,x142 - _varying_SF))) *
-                                (x142 - _varying_SF)))) * 15.0);
+    vec3  x81 = vec3(-0.37139067,-0.0,-0.9284767);
+    float x75 = abs(dot(_varying_SS,x81));
+    vec3  x113 = vec3(0.37139067,0.0,0.9284767);
+    vec3  x129 = vec3(1.0,1.0,-2.5);
+    float x84 = exp(log(max(0.0
+                           ,dot(vec3(2.0 * dot(_varying_SS,x81)) * _varying_SS +
+                                x113
+                               ,vec3(1.0 / sqrt(dot(x129 - _varying_SF
+                                                   ,x129 - _varying_SF))) *
+                                (x129 - _varying_SF)))) * 15.0);
     gl_FragColor = vec4(dot(vec2(x16 ? 0.0 : 1.0,0.5)
-                           ,vec2(0.2 + 0.4 * x88,x97))
-                       ,0.5 * x97
-                       ,dot(vec2(x16 ? 1.0 : 0.0,0.5),vec2(0.2 + 0.4 * x88,x97))
-                       ,1.0 + x88 + x97);
-
+                           ,vec2(0.2 + 0.4 * x75,x84))
+                       ,dot(vec2(x16 ? 0.0 : 1.0,0.5),vec2(0.2 + 0.4 * x75,x84))
+                       ,dot(vec2(x16 ? 0.0 : 1.0,0.5),vec2(0.2 + 0.4 * x75,x84))
+                       ,(x16 ? 0.0 : 1.0) * (1.0 + x75) + x84);
     
 }
 </script>
@@ -110,46 +106,57 @@ varying   vec2 _varying_F;
 varying   vec3 _varying_SF;
 varying   vec3 _varying_SS;
 void main () {
-    vec2  x15 = _attribute;
-    vec2  x31 = vec2(2.0,9.0);
-    vec3  x10 = vec3(x15.x
-                    ,x15.y
-                    ,sin(dot(x31,vec2(_uniform,sqrt(dot(x15,x15))))) /
-                     exp(log(1.0 + sqrt(dot(x15,x15))) * 3.0));
-    vec2  x130 = vec2(2.0,9.0);
-    float x136 = dot(x15,x15);
-    float x127 = dot(x130,vec2(_uniform,sqrt(x136)));
-    float x125 = cos(x127);
-    float x152 = 1.0 / (2.0 * sqrt(x136));
-    float x163 = x15.x;
-    float x165 = sin(x127);
-    float x184 = dot(x15,x15);
-    float x179 = 1.0 + sqrt(x184);
-    float x174 = log(x179) * 3.0;
-    float x172 = exp(x174);
-    float x170 = 1.0 / x172;
-    float x196 = 1.0 / (x172 * x172);
-    float x206 = exp(x174);
-    float x216 = 1.0 / x179;
-    float x223 = 1.0 / (2.0 * sqrt(x184));
-    float x114 = dot(vec2(x125 * (9.0 * (x152 * (x163 + x163))),x165)
-                    ,vec2(x170
-                         ,x196 * (x206 * (x216 * (x223 * (x163 + x163)) *
-                                          3.0))));
-    float x255 = x15.y;
-    float x233 = dot(vec2(x125 * (9.0 * (x152 * (x255 + x255))),x165)
-                    ,vec2(x170
-                         ,x196 * (x206 * (x216 * (x223 * (x255 + x255)) *
-                                          3.0))));
-    float x101 = 1.0 / sqrt(dot(vec2(x114,x233),vec2(x114,x233)) + 1.0);
-    vec3  x89 = gl_NormalMatrix * vec3(x101 * - x114,x101 * - x233,x101);
+    vec2  x31 = _attribute;
+    float x29 = x31.x;
+    float x16 = 0.75 + 0.33333334 * cos(x29 * 3.1415927);
+    float x41 = x31.y;
+    float x72 = 0.5 * _uniform;
+    float x70 = cos(x72);
+    float x77 = sin(x72);
+    vec3  x10 = vec3(x16 * cos(-3.1415927 * x41)
+                    ,dot(vec2(x16,-0.33333334) * sin(vec2(-3.1415927,x29) *
+                                                     vec2(x41,3.1415927))
+                        ,vec2(x70,x77))
+                    ,dot(vec2(0.33333334,x16) * sin(vec2(x29,-3.1415927) *
+                                                    vec2(3.1415927,x41))
+                        ,vec2(x70,x77)));
+    float x178 = x31.x;
+    float x175 = x178 * 3.1415927;
+    float x166 = - (sin(x175)) * 3.1415927;
+    float x163 = 0.33333334 * x166;
+    float x187 = -3.1415927 * x31.y;
+    float x185 = sin(x187);
+    float x193 = cos(x178 * 3.1415927) * 3.1415927;
+    float x154 = dot(vec2(x163,-0.33333334) * vec2(x185,x193)
+                    ,vec2(x70,x77));
+    float x209 = dot(vec2(0.33333334,x163) * vec2(x193,x185),vec2(x70,x77));
+    vec2  x233 = vec2(0.75,0.75);
+    vec2  x237 = vec2(0.33333334,0.33333334);
+    vec2  x245 = vec2(3.1415927,3.1415927);
+    float x252 = cos(x187);
+    vec2  x256 = vec2(-3.1415927,-3.1415927);
+    float x148 = dot(vec2(x154,- x209)
+                    ,(x233 + x237 * cos(x31.xx * x245)) * (vec2(x252,x252) *
+                                                           x256) * vec2(x77
+                                                                       ,x70));
+    float x273 = cos(x187);
+    float x281 = 0.75 + 0.33333334 * cos(x175);
+    float x289 = x281 * (x252 * -3.1415927);
+    float x299 = - (sin(x187)) * -3.1415927;
+    float x260 = dot(vec2(x209,-0.33333334 * x166 * x273)
+                    ,vec2(x281,x289) * vec2(x299,x77));
+    float x308 = dot(vec2(x163 * x273,- x154)
+                    ,vec2(x289,x281) * vec2(x70,x299));
+    float x135 = 1.0 / sqrt(dot(vec3(vec2(x148,x260),x308)
+                               ,vec3(vec2(x148,x260),x308)));
+    vec3  x123 = gl_NormalMatrix * (vec3(x135,x135,x135) * vec3(x148
+                                                               ,x260
+                                                               ,x308));
     gl_Position = gl_ModelViewProjectionMatrix * vec4(x10,1.0);
     _varying_F = _attribute;
     _varying_SF = x10;
-    _varying_SS = vec3(1.0 / sqrt(dot(x89,x89))) * x89;
-}
-
-</script>
+    _varying_SS = vec3(1.0 / sqrt(dot(x123,x123))) * x123;
+}</script>
 
 <script type="text/javascript">
 
@@ -296,10 +303,22 @@ void main () {
    }
 
    function keyHandler(e) {
-     if (e.charCode == 119) { mat4.rotate(mvpMatrix,  0.05, [1.0, 0.0, 0.0]);}
-     if (e.charCode == 115) { mat4.rotate(mvpMatrix, -0.05, [1.0, 0.0, 0.0]);}
-     if (e.charCode == 97) { mat4.rotate(mvpMatrix,   0.05, [0.0, 1.0, 0.0]);}
-     if (e.charCode == 100) { mat4.rotate(mvpMatrix, -0.05, [0.0, 1.0, 0.0]);}     
+     if (e.charCode == 119) {
+       mat4.rotate(mvpMatrix,  0.05, [1.0, 0.0, 0.0]);
+       mat3.rotate(normalMatrix, 0.05, [1.0, 0.0, 0.0]);
+     }
+     if (e.charCode == 115) {
+       mat4.rotate(mvpMatrix, -0.05, [1.0, 0.0, 0.0]);
+       mat3.rotate(normalMatrix, -0.05, [1.0, 0.0, 0.0]);
+     }
+     if (e.charCode == 97) {
+       mat4.rotate(mvpMatrix,   0.05, [0.0, 1.0, 0.0]);
+       mat3.rotate(normalMatrix, 0.05, [0.0, 1.0, 0.0]);
+     }
+     if (e.charCode == 100) {
+       mat4.rotate(mvpMatrix, -0.05, [0.0, 1.0, 0.0]);
+       mat3.rotate(normalMatrix, -0.05, [0.0, 1.0, 0.0]);
+     }     
    }
 
    function webGLStart() {
